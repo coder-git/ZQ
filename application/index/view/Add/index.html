@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>添加</title>
+	<link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css">
+	<style>
+	.add_header{width:100%;padding:5px;}
+	.layui-inline{width: 100%}
+</style>
+</head>
+<body>
+
+
+	<div class="add_header">
+		<button class="layui-btn layui-btn-md ayui-btn-danger" id="add_data">
+			<i class="layui-icon  layui-icon-add-circle" ></i> 添加
+		</button>
+		<button class="layui-btn layui-btn-md layui-btn-danger" id="del_data">
+			<i class="layui-icon layui-icon-delete"></i>
+		</button>
+
+		<button class="layui-btn layui-btn-md layui-btn-primary add_icon">
+			<i class="layui-icon  layui-icon-face-smile" style="font-weight: bold;color:#FFB800">&#xe664;</i>
+		</button>
+		<button class="layui-btn layui-btn-md layui-btn-primary add_icon">
+			<i class="layui-icon layui-icon-face-cry" style="font-weight: bold;color:#FF5722">&#xe6af;</i>
+		</button>
+		<button class="layui-btn layui-btn-md layui-btn-primary add_icon">
+			<i class="layui-icon  layui-icon-face-smile-b" style="font-weight: bold;color:#01AAED">&#xe69c;</i>
+		</button>
+		<button class="layui-btn layui-btn-md layui-btn-primary add_icon">
+			<i class="layui-icon layui-icon-face-smile-fine" style="font-weight: bold;color:#2F4056">&#xe650;</i>
+		</button>
+	</div>
+
+
+	<div class="layui-container" >
+		<div class="layui-row layui-col-space10">
+			<form class="layui-form" action="">
+				
+				<div class="layui-col-xs5 layui-col-sm4 layui-col-md2  layui-col-md-offset1 layui-col-sm-offset2 layui-col-xs-offset1"   >
+					<div class="layui-inline">
+						<select name="city" lay-verify="" class="layui-input-inline" lay-search>
+							<option value="">请选择地区</option>
+							<option value="010">济南</option>
+							<option value="021">江门</option>
+							<option value="0571">济宁</option>
+						</select>  
+					</div>
+				</div>
+				<div class=" layui-col-xs5 layui-col-sm4 layui-col-md2  layui-col-md-offset1 layui-col-sm-offset2 layui-col-xs-offset1">
+					<div class="layui-inline">
+						<select name="worker_place" lay-verify="" class="layui-input-inline" lay-search >
+							<option value="">请选择业务类型</option>
+							<option value="广东">推广</option>
+							<option value="021">官网</option>
+							<option value="0571">58</option>
+						</select>  
+					</div>
+				</div>
+				<div class="layui-col-xs5 layui-col-sm4 layui-col-md2  layui-col-md-offset1 layui-col-sm-offset2 layui-col-xs-offset1">
+					<div class="layui-inline"> 
+						<input type="text" class="layui-input layui-input-inline" id="data_date" placeholder="选择时间">
+					</div> 
+				</div>
+
+				<div class="layui-col-xs5  layui-col-sm4 layui-col-md2 layui-col-md-offset1 layui-col-sm-offset2 layui-col-xs-offset1">
+					<div class="layui-inline"> 
+						<input type="text" class="layui-input layui-input-inline" id="" placeholder="选择时间" >
+					</div>  
+				</div>
+
+			</form>
+		</div>
+	</div>
+
+	<table id="show_table" class="lay-skin"></table>
+
+
+	<script type="text/html" id="edit_bar">
+		<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>  
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+		<!-- 这里同样支持 laytpl 语法，如： -->
+		{{#  if(d.auth > 2){ }}
+		<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+		{{#  } }}
+	</script>
+	<script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+	<script>
+		layui.config({
+  base: '__STATIC__/index/js_module/' //你存放新模块的目录，注意，不是layui的模块目录
+}).use('add'); //加载入口
+</script>   
+</body>
+</html>

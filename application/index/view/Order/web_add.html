@@ -1,0 +1,172 @@
+{include file="Public:header" /}
+</head>
+<body>
+	
+	<form class="layui-form" action="">
+		<div class="layui-form-item">
+			<label class="layui-form-label">公司名：</label>
+			<div class="layui-input-block">
+				<input type="text" name="company_name" lay-verify="required" autocomplete="off" placeholder="公司名：" class="layui-input">
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+
+			<div class="layui-inline">
+				<label class="layui-form-label">网址</label>
+				<div class="layui-input-inline">
+					<input type="tel" name="url" lay-verify="url" autocomplete="off" class="layui-input" value="http://">
+				</div>
+			</div>
+
+			<div class="layui-inline">
+				<label class="layui-form-label">联系人</label>
+				<div class="layui-input-inline">
+					<input type="tel" name="username" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+
+
+			<div class="layui-inline">
+				<label class="layui-form-label">联系方式</label>
+				<div class="layui-input-inline">
+					<input type="tel" name="tel" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+
+			<div class="layui-inline">
+				<label class="layui-form-label"> 邮箱</label>
+				<div class="layui-input-inline">
+					<input type="text" name="email"   autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+
+		</div>
+
+		<div class="layui-form-item">
+
+
+			<div class="layui-inline">
+				<label class="layui-form-label">产品类型</label>
+				<div class="layui-input-inline">
+
+					<select name="type">
+						<option value="">请选择类型</option>
+						{volist name="types" id="type"}
+							<option value="{$key}" {eq name="key" value="standard"} selected="" {/eq} >{$type}</option>
+						{/volist}
+
+
+					</select>
+				</div>
+			</div>
+
+
+			<div class="layui-inline">
+				<label class="layui-form-label">订单金额</label>
+				<div class="layui-input-inline">
+					<input type="text" name="price" lay-verify="required|number" autocomplete="off" class="layui-input">
+				</div>
+				<div class="layui-form-mid layui-word-aux"> 元</div>
+			</div>
+		</div>
+
+
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">开始时间</label>
+
+				<div class="layui-input-inline">
+					<input type="text" name="start_t" id="sdate" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">结束时间</label>
+
+				<div class="layui-input-inline">
+					<input type="text" name="end_t" id="edate" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-block">
+				<textarea placeholder="请输入内容" class="layui-textarea" name="remarks"></textarea>
+			</div>
+		</div>
+  <!--<div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">编辑器</label>
+    <div class="layui-input-block">
+      <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
+    </div>
+</div>-->
+<div class="layui-form-item">
+	<div class="layui-input-block">
+		<button class="layui-btn" lay-submit="" lay-filter="sub1">立即提交</button>
+		<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		<button type="reset" class="layui-btn layui-btn-primary" id="closepage">关闭本页面</button>
+	</div>
+</div>
+</form>
+
+
+<script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+
+
+<script>
+	layui.use(['layer','form','jquery','laydate'], function(){
+		var layer = layui.layer,
+		$ = layui.jquery,
+		form = layui.form,
+		laydate = layui.laydate;
+
+
+		laydate.render({
+			elem: "#sdate",
+			value: new Date()
+		});
+		laydate.render({
+			elem: "#edate"
+		});
+
+
+
+		form.on('submit(sub1)', function(data){
+
+
+			$.post("{:url('Orderweb/add_order')}",{data : data.field},function(res){
+				
+				if (res.status) {
+					var index = parent.layer.getFrameIndex(window.name);
+					parent.layer.msg(res.msg);
+					parent.layer.close(index);
+
+				}
+
+
+			});
+
+
+			console.log(data.field);
+
+
+			return false; 
+		});
+
+
+
+
+		$("#closepage").on("click", function(){
+			var index = parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index);
+		})
+	})
+
+</script>
+
+</body>
+</html>
