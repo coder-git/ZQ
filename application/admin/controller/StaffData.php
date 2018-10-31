@@ -93,17 +93,17 @@ public function deldatas()
 public function editdatas()
 {
 	$serialize_data = input();
+	$i = 1;
 
 	$results = Staffs::where('staff_id',$serialize_data['staff_id'])->update($serialize_data);
 
 	if ($results) {
 
-		$this->success('成功');
+		$this->success('成功'.$i++);
 	} else {
 
-		
 		return $results = Staffs::where('staff_id',$serialize_data['staff_id'])->fetChSql(true)->update($serialize_data);
-		$this->error('修改失败');
+		$this->error('修改失败'.$i++);
 	}
 }
 

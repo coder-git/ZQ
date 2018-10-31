@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:64:"D:\WWW\ZQ\public/../application/admin\view\staff_data\index.html";i:1539854547;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:64:"D:\WWW\ZQ\public/../application/admin\view\staff_data\index.html";i:1540978018;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -161,7 +161,7 @@
             </div>
 
             <div class="col-sm-12 text-center edit_btn" style="display: none">
-                <button type="button" class="btn btn-success">确认</button>
+                <button type="button" class="btn btn-success" id="itstrue">确认</button>
                 <button type="button" class="btn btn-success" id="reset_btn">取消</button>
             </div>
 
@@ -192,21 +192,24 @@
 
 <script>
 
- $("#testtable").bootstrapTable({
-    columns:[{
-        checkbox:true,
-        visible:true
-    },{
-        field:'staff_name',
-        title:'用户名'
-    },{
-        field:'department.department',
-        title:'部门'
-    },{
-        field:'staff_id',
-        title:'操作',
-        formatter: actionFormatter
-    }],
+
+    function table_render(){
+
+     $("#testtable").bootstrapTable({
+        columns:[{
+            checkbox:true,
+            visible:true
+        },{
+            field:'staff_name',
+            title:'用户名'
+        },{
+            field:'department.department',
+            title:'部门'
+        },{
+            field:'staff_id',
+            title:'操作',
+            formatter: actionFormatter
+        }],
         // data:[{
         //     id:1,
         //     staff_name:'王群',
@@ -231,7 +234,15 @@
 
     }); // init via javascript
 
- $(window).resize(function () {
+
+ }
+
+
+
+    table_render();
+
+
+$(window).resize(function () {
     $('#testtable').bootstrapTable('resetView');
 });
 
@@ -255,10 +266,11 @@
 
     function EditViewById(datas,view){
         var datass = JSON.parse(decodeURI(datas));
-
+            var is = 1;
 
         if (view == 'view') {
             console.log(view + 'view');
+
 //查看信息
 layer.open({
     type:1,
@@ -283,6 +295,7 @@ layer.open({
                     $(".read_btn").show();
                     addpost(datass.d_id,datass.post_id);
 
+console.log(is++);
                     $(".read_btn > button").on("click",function(){
                         layer.close(layer.index);
                     })
@@ -301,12 +314,13 @@ layer.open({
                 }
 
 
-            })
+            });
 
 } else {
     console.log(view + 'edit');
+
 //编辑
-layer.open({
+var lay_edit_index = layer.open({
     type:1,
     title:'修改信息',
     content:$("#user_c"),
@@ -330,6 +344,8 @@ layer.open({
 
                     $(".edit_btn").show();
 
+
+
                     laydate.render({
                         elem:'#worktime',
                         format: 'yyyy-MM-dd'
@@ -338,32 +354,6 @@ layer.open({
                     laydate.render({
                         elem:'#birthday_mouth',
                         format:'yyyy-MM'
-                    });
-
-                    $("#reset_btn").on("click",function(){
-                        layer.close(layer.index);
-                    })
-
-                    $(".edit_btn > button").on("click",function(res){
-
-                        var formdas = $("#contents_from").serialize();
-
-
-                        // console.log(formdas);
-
-
-                        $.ajax({
-                            url:'<?php echo url("staff_data/editdatas"); ?>',
-                            type:'POST',
-                            data:formdas,
-                            success:function(res){
-                                if (res.code == 1) { layer.close(layer.index)}
-                                // layer.msg(res);
-
-                                $("#testtable").bootstrapTable('load', loaddatas());
-                                // console.log(res);
-                            }
-                        });
                     });
 
 
@@ -376,6 +366,8 @@ layer.open({
                 }
 
             });
+
+
 
 }
 
@@ -392,9 +384,73 @@ function loaddatas() {
         success:function(res){
            console.log(res);
            return res;
-        }
-    })
+       }
+   })
 }
+
+
+
+
+
+
+
+
+
+
+$("#reset_btn").on("click",function(){
+    // layer.close(lay_edit_index);
+    layer.closeAll('page');
+
+});
+
+
+
+$(document).find("#itstrue").on("click",function(res){
+
+
+    var formdas = $("#contents_from").serialize();
+
+    $.ajax({
+        url:'<?php echo url("staff_data/editdatas"); ?>',
+        type:'POST',
+        data:formdas,
+        success:function(res){
+
+
+            if (res.code == 1) { 
+                console.log('res.code == 1');
+
+                $("#testtable").bootstrapTable('destroy');
+                table_render();
+
+            } else {
+                console.log('res.code != 1');
+            }
+            // layer.close(lay_edit_index);
+        layer.closeAll('page');
+            
+            
+            // layer.msg(res);
+        },
+        error:function(res){
+            console.log('error');
+        }
+    });
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -428,17 +484,17 @@ $("#del_method").on("click",function(){
 //封装ajax的删除
 function del_ajx(ids){
 
-     $.ajax({
-        url: '<?php echo url("staff_data/deldatas"); ?>',
-        type:"POST",
-        data:{ids:ids},
-        success:function(res){
-            layer.msg(res.msg);
-            if (res.code) {
-                $('#testtable').bootstrapTable('remove', {field: 'staff_id', values: ids});
-            }
+ $.ajax({
+    url: '<?php echo url("staff_data/deldatas"); ?>',
+    type:"POST",
+    data:{ids:ids},
+    success:function(res){
+        layer.msg(res.msg);
+        if (res.code) {
+            $('#testtable').bootstrapTable('remove', {field: 'staff_id', values: ids});
         }
-    });
+    }
+});
 }
 
 
@@ -459,20 +515,20 @@ function addpost(did,postid){
 
  var postidtag = "#postid"+postid;
 
-     $.each(posts,function(index,val){
-        if (val['d_id'] == did) {
-           $("#son_postrow").empty();
+ $.each(posts,function(index,val){
+    if (val['d_id'] == did) {
+       $("#son_postrow").empty();
 
-           $.each(val['post'],function(index,postval){
+       $.each(val['post'],function(index,postval){
 
-             $("#son_postrow").append("<option value="+index+" id='postid"+index+"'>"+postval+"</option>");
+         $("#son_postrow").append("<option value="+index+" id='postid"+index+"'>"+postval+"</option>");
 
-         })
+     })
 
-       }
-    });
+   }
+});
 
-     $(document).find(postidtag).attr('selected','selected');
+ $(document).find(postidtag).attr('selected','selected');
 
 }
 
