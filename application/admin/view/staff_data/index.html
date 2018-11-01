@@ -46,7 +46,7 @@
 
             <!-- toolbar start -->
             <div class="btn-group hidden-xs" id="testToolbar" role="group">
-                <button type="button" class="btn btn-outline btn-default">
+                <button type="button" class="btn btn-outline btn-default" id="add_user">
                     <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
                 </button>
                 <button type="button" class="btn btn-outline btn-default">
@@ -294,7 +294,7 @@ layer.open({
                     $(".read_btn").show();
                     addpost(datass.d_id,datass.post_id);
 
-console.log(is++);
+
                     $(".read_btn > button").on("click",function(){
                         layer.close(layer.index);
                     })
@@ -342,7 +342,7 @@ var lay_edit_index = layer.open({
 
 
                     $(".edit_btn").show();
-
+                    $("#itstrue").attr("action_type","edit");
 
 
                     laydate.render({
@@ -395,65 +395,6 @@ function loaddatas() {
 
 
 
-
-$("#reset_btn").on("click",function(){
-    // layer.close(lay_edit_index);
-    layer.closeAll('page');
-
-});
-
-
-
-$(document).find("#itstrue").on("click",function(res){
-
-
-    var formdas = $("#contents_from").serialize();
-
-    $.ajax({
-        url:'{:url("staff_data/editdatas")}',
-        type:'POST',
-        data:formdas,
-        success:function(res){
-
-
-            if (res.code == 1) { 
-                console.log('res.code == 1');
-
-                $("#testtable").bootstrapTable('destroy');
-                table_render();
-
-            } else {
-                console.log('res.code != 1');
-            }
-            // layer.close(lay_edit_index);
-        layer.closeAll('page');
-            
-            
-            // layer.msg(res);
-        },
-        error:function(res){
-            console.log('error');
-        }
-    });
-
-
-
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //删除
 
 //行内删除按钮
@@ -480,6 +421,42 @@ $("#del_method").on("click",function(){
 });
 
 
+
+//添加员工信息
+$("#add_user").on("click",function(){
+
+    var add_u_index = layer.open({
+        type:1,
+        content:$("#user_c"),
+        area:["500px","400px"],
+        success:function(index){
+            console.log(index);
+
+            console.log('this add mnethod.');
+
+
+                    laydate.render({
+                        elem:'#worktime',
+                        format: 'yyyy-MM-dd'
+                    });
+
+                    laydate.render({
+                        elem:'#birthday_mouth',
+                        format:'yyyy-MM'
+                    });
+
+                    $(".edit_btn").show();
+                    $("#itstrue").attr("action_type","add");
+
+
+                    addpost();
+        }
+    });
+});
+
+
+
+
 //封装ajax的删除
 function del_ajx(ids){
 
@@ -499,6 +476,68 @@ function del_ajx(ids){
 
 
 
+$("#reset_btn").on("click",function(){
+    // layer.close(lay_edit_index);
+    layer.closeAll('page');
+
+});
+
+
+//添加编辑
+$(document).find("#itstrue").on("click",function(res){
+
+
+    var formdas = $("#contents_from").serialize();
+    var atype = $(this).attr('action_type');
+    console.log(atype);
+
+    var aurl = atype == 'edit' ? '{:url("staff_data/editdatas")}' : '{:url("staff_data/adddatas")}';
+    console.log(aurl);
+
+
+    $.ajax({
+        url:aurl,
+        type:'POST',
+        data:formdas,
+        success:function(res){
+
+
+            if (res.code == 1) { 
+                console.log('res.code == 1');
+
+                $("#testtable").bootstrapTable('destroy');
+                table_render();
+
+            } else {
+                console.log('res.code != 1');
+            }
+            // layer.close(lay_edit_index);
+        layer.closeAll('page');
+
+            
+            // layer.msg(res);
+        },
+        error:function(res){
+            console.log('error');
+        }
+    });
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //联动
@@ -509,6 +548,11 @@ $("#deparids").on("change",function(event){
 
 // <option value="{$row.d_id}" id="depart{$row.d_id}">{$row.department}</option>
 function addpost(did,postid){
+
+
+if (!did) {
+    did = 1;
+}
 
  var posts = <?php echo json_encode($depart)?>;
 

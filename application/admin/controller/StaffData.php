@@ -107,6 +107,13 @@ public function editdatas()
 	}
 }
 
+
+public function adddatas()
+{
+	$serialize_data = input();
+	
+}
+
 public function add_profile()
 {
 
