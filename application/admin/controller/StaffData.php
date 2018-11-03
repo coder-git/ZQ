@@ -99,7 +99,7 @@ public function editdatas()
 
 	if ($results) {
 
-		$this->success('成功'.$i++);
+		$this->success('修改成功'.$i++);
 	} else {
 
 		return $results = Staffs::where('staff_id',$serialize_data['staff_id'])->fetChSql(true)->update($serialize_data);
@@ -111,6 +111,18 @@ public function editdatas()
 public function adddatas()
 {
 	$serialize_data = input();
+	$Staffs_m = new Staffs;
+
+
+
+	$result = $Staffs_m->data($serialize_data)->save();
+
+
+	if ($result) {
+		$this->success('添加成功');
+	} else {
+		$this->error('添加失败');
+	}
 	
 }
 

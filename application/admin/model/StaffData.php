@@ -14,7 +14,7 @@ class StaffData extends Model
 	public function show()
 	{
 		// $staffs = StaffData::select();
-		$datas = StaffData::with('department')->select();
+		$datas = StaffData::with('department')->order("staff_id desc")->select();
 		return $datas;
 	}
 

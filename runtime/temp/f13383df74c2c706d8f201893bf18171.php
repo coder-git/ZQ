@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:64:"D:\WWW\ZQ\public/../application/admin\view\staff_data\index.html";i:1541064841;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:64:"D:\WWW\ZQ\public/../application/admin\view\staff_data\index.html";i:1541209280;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -144,7 +144,7 @@
 
             <div class="form-group col-sm-6">
                 <label>公司座机：</label>
-                <input type="text" id="company_tel" name="seat" placeholder="请输入您的座机" class="form-control">
+                <input type="text" id="company_tel" name="seat" placeholder="请输入您的座机" class="form-control" required="required">
             </div>
             <div class="form-group col-sm-6">
                 <label>手机号：</label>
@@ -153,7 +153,7 @@
 
             <div class="form-group col-sm-6">
                 <label>入职日期：</label>
-                <input type="text" id="worktime" name="worktime" placeholder="请输入您注册的E-mail" class="form-control">
+                <input type="text" id="worktime" name="worktime" placeholder="请输入您注册的E-mail" class="form-control"  >
             </div>
             <div class="form-group col-sm-6">
                 <label>出生日期：</label>
@@ -187,6 +187,8 @@
 <script src="/static/admin/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
 <script src="/static/admin/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
 <script src="/static/admin/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="/static/admin/js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="/static/admin/js/plugins/validate/messages_zh.min.js"></script>
 <!-- Peity -->
 <!-- <script src="/static/admin/js/demo/bootstrap-table-demo.js"></script> -->
 
@@ -306,6 +308,8 @@ layer.open({
 
                     $(":disabled").removeAttr('disabled');
                     $(".read_btn").hide();
+                    // $("#contents_from")[0].reset();
+                    document.getElementById("contents_from").reset();
 
                     // $("#contents_from > input:disabled").attr('1234132','1111');
                     // console.log($("#contents_from > input:disabled"));
@@ -361,6 +365,8 @@ var lay_edit_index = layer.open({
 
                 },
                 end: function(index,layero){
+                    // $("#contents_from")[0].reset();
+                    document.getElementById("contents_from").reset();
 
                     $(".edit_btn").hide();
                 }
@@ -415,9 +421,10 @@ $("#del_method").on("click",function(){
  var ids =  $.map($("#testtable").bootstrapTable('getSelections'), function (row) {
     return row.staff_id;
 
-    del_ajx(ids);
+
 });
 
+    del_ajx(ids);
 
 });
 
@@ -451,6 +458,11 @@ $("#add_user").on("click",function(){
 
 
                     addpost();
+        }, end:function(){
+            // $("#contents_from")[0].reset();
+            document.getElementById("contents_from").reset();
+             $(".edit_btn").hide();
+
         }
     });
 });
@@ -461,17 +473,17 @@ $("#add_user").on("click",function(){
 //封装ajax的删除
 function del_ajx(ids){
 
- $.ajax({
-    url: '<?php echo url("staff_data/deldatas"); ?>',
-    type:"POST",
-    data:{ids:ids},
-    success:function(res){
-        layer.msg(res.msg);
-        if (res.code) {
-            $('#testtable').bootstrapTable('remove', {field: 'staff_id', values: ids});
+    $.ajax({
+        url: '<?php echo url("staff_data/deldatas"); ?>',
+        type:"POST",
+        data:{ids:ids},
+        success:function(res){
+            layer.msg(res.msg);
+            if (res.code) {
+                $('#testtable').bootstrapTable('remove', {field: 'staff_id', values: ids});
+            }
         }
-    }
-});
+    });
 }
 
 
@@ -490,38 +502,46 @@ $(document).find("#itstrue").on("click",function(res){
 
     var formdas = $("#contents_from").serialize();
     var atype = $(this).attr('action_type');
-    console.log(atype);
+
 
     var aurl = atype == 'edit' ? '<?php echo url("staff_data/editdatas"); ?>' : '<?php echo url("staff_data/adddatas"); ?>';
     console.log(aurl);
+    var uname = $("#staff_name").val(), p_id = $("#son_postrow").val(), worktime = $("#worktime").val(), mobile = $("#mobile").val();
+    if (uname && p_id && worktime && mobile) {
+
+        $.ajax({
+            url:aurl,
+            type:'POST',
+            data:formdas,
+            success:function(res){
 
 
-    $.ajax({
-        url:aurl,
-        type:'POST',
-        data:formdas,
-        success:function(res){
+                if (res.code == 1) { 
+                    console.log('res.code == 1');
+
+                    $("#testtable").bootstrapTable('destroy');
+                    table_render();
+                    layer.msg(res.msg);
+
+                    layer.closeAll('page');
+                } else {
+                    layer.msg(res.msg);
+                }
+                // layer.close(lay_edit_index);
 
 
-            if (res.code == 1) { 
-                console.log('res.code == 1');
-
-                $("#testtable").bootstrapTable('destroy');
-                table_render();
-
-            } else {
-                console.log('res.code != 1');
+                // layer.msg(res);
+            },
+            error:function(res){
+                console.log('error');
             }
-            // layer.close(lay_edit_index);
-        layer.closeAll('page');
+        });
 
-            
-            // layer.msg(res);
-        },
-        error:function(res){
-            console.log('error');
-        }
-    });
+    } else {
+
+        layer.msg('用户名、部门、入职时间和手机号不能为空！'+'\n'+'如果不想添加了，请点叉或者取消。');
+    }
+
 
 
 
