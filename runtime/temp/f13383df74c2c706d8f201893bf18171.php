@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:64:"D:\WWW\ZQ\public/../application/admin\view\staff_data\index.html";i:1541209280;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:64:"D:\WWW\ZQ\public/../application/admin\view\staff_data\index.html";i:1541583012;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -507,7 +507,7 @@ $(document).find("#itstrue").on("click",function(res){
     var aurl = atype == 'edit' ? '<?php echo url("staff_data/editdatas"); ?>' : '<?php echo url("staff_data/adddatas"); ?>';
     console.log(aurl);
     var uname = $("#staff_name").val(), p_id = $("#son_postrow").val(), worktime = $("#worktime").val(), mobile = $("#mobile").val();
-    if (uname && p_id && worktime && mobile) {
+    if ($.trim(uname) && $.trim(p_id) && $.trim(worktime) && $.trim(mobile)) {
 
         $.ajax({
             url:aurl,

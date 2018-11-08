@@ -506,7 +506,7 @@ $(document).find("#itstrue").on("click",function(res){
     var aurl = atype == 'edit' ? '{:url("staff_data/editdatas")}' : '{:url("staff_data/adddatas")}';
     console.log(aurl);
     var uname = $("#staff_name").val(), p_id = $("#son_postrow").val(), worktime = $("#worktime").val(), mobile = $("#mobile").val();
-    if (uname && p_id && worktime && mobile) {
+    if ($.trim(uname) && $.trim(p_id) && $.trim(worktime) && $.trim(mobile)) {
 
         $.ajax({
             url:aurl,
